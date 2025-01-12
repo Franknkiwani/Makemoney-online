@@ -1,0 +1,333 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Card Generator</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            background: linear-gradient(white,white,pink);
+            color: bkack;
+            padding: 20px 15px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin: 0;
+            display: inline-block;
+        }
+
+        header .heart {
+            color: #ffdf80;
+            margin-left: 8px;
+            font-size: 1.5rem;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: cyan;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .card img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 15px;
+        }
+
+        .generate-btn {
+            display: inline-block;
+            background: #6200ea;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .generate-btn:hover {
+            background: #3700b3;
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: pink;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .popup-content h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .dropdown {
+            margin: 15px 0;
+            padding: 10px;
+            font-size: 1rem;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .blurred-code {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            color:black;
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            filter: blur(6px);
+            user-select: none;
+        }
+
+        .pay-btn {
+            background: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .pay-btn:hover {
+            background: #388e3c;
+        }
+
+        .legit-text {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 15px;
+        }
+
+        .close-btn {
+            background: red;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .close-btn:hover {
+            background: darkred;
+        }
+
+        .users-generated {
+            margin: 10px 0;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        /* Bottom container */
+        .bottom-container {
+            background-color: black;
+            color: white;
+            padding: 20px 0;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .bottom-container p {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .visit-btn {
+            background: #ff4081;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 90%
+        }
+
+        .visit-btn:hover {
+            background: #f50057;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Gift Card Generator <span class="heart">❤️</span></h1>
+        <p>Legit gift cards for Christmas! 🎁</p>
+    </header>
+    
+    <main>
+        <div class="card-container">
+            <!-- Amazon Card -->
+            <div class="card" onclick="openPopup('Amazon')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon Logo">
+                <button class="generate-btn">Amazon</button>
+            </div>
+            <!-- Roblox Card -->
+            <div class="card" onclick="openPopup('Roblox')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Roblox_Logo_2017.png" alt="Roblox Logo">
+                <button class="generate-btn">Roblox</button>
+            </div>
+            <!-- Google Card -->
+            <div class="card" onclick="openPopup('Google')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google Logo">
+                <button class="generate-btn">Google</button>
+            </div>
+            <!-- Apple Card -->
+            <div class="card" onclick="openPopup('Apple')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_2015.svg" alt="Apple Logo">
+                <button class="generate-btn">Apple</button>
+            </div>
+        </div>
+    </main>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <button class="close-btn" onclick="closePopup()">X</button>
+            <h2 id="popup-title"></h2>
+            <p class="users-generated" id="user-stats"></p>
+            <select class="dropdown" id="amount"></select>
+            <div class="blurred-code" id="code">XXXX-XXXX-XXXX-XXXX</div>
+            <a class="pay-btn" href="https://www.paypal.com/ncp/payment/U9N6ZEUTXY7MC" target="_blank">Pay $1.99 to Unlock Code</a>
+            <p class="legit-text">This is 100% legit. Hurry! Limited Christmas codes are available!</p>
+        </div>
+    </div>
+
+    <div class="bottom-container" id="bottom-container">
+        <button class="visit-btn" onclick="window.location.href='https://luglawhaulsano.net/4/7950037'">VISIT NOW</button>
+    </div>
+
+    <script>
+        function openPopup(brand) {
+            const popup = document.getElementById("popup");
+            const title = document.getElementById("popup-title");
+            const userStats = document.getElementById("user-stats");
+            const amountDropdown = document.getElementById("amount");
+            const code = document.getElementById("code");
+
+            // Set brand-specific options
+            title.innerText = `Generate ${brand} Gift Card`;
+            amountDropdown.innerHTML = "";
+
+            // Dynamic user stats
+            const userCounts = {
+                Amazon: Math.floor(Math.random() * 500) + 1000,
+                Roblox: Math.floor(Math.random() * 300) + 800,
+                Google: Math.floor(Math.random() * 400) + 1100,
+                Apple: Math.floor(Math.random() * 350) + 900
+            };
+            userStats.innerText = `${userCounts[brand]} users generated ${brand} codes today!`;
+
+            if (brand === "Roblox") {
+                for (let i = 100; i <= 1000; i += 100) {
+                    const option = document.createElement("option");
+                    option.value = i;
+                    option.textContent = `${i} Robux`;
+                    amountDropdown.appendChild(option);
+                }
+            } else {
+                const option = document.createElement("option");
+                option.value = "100";
+                option.textContent = "$100 Gift Card";
+                amountDropdown.appendChild(option);
+            }
+
+            // Generate a random code
+            code.innerText = `${Math.random().toString(36).substr(2, 4).toUpperCase()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`;
+
+            popup.style.display = "flex";
+        }
+
+        function closePopup() {
+            const popup = document.getElementById("popup");
+            popup.style.display = "none";
+        }
+
+        // Randomly change text in the bottom container after 5 seconds
+        setTimeout(() => {
+            const bottomContainer = document.getElementById("bottom-container");
+            bottomContainer.querySelector("p").textContent = `YOU WON $${Math.floor(Math.random() * 200) + 50} PAYPAL!`;
+        }, 5000);
+    </script>
+</body>
+</html>
