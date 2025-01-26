@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk Header</title>
+    <style>
+        /* Base styling for body */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Orbitron', sans-serif; /* Futuristic font for cyberpunk feel */
+            background-color: #121212; /* Dark background for contrast */
+        }
+
+        /* Styling for the header */
+        header {
+            width: 100%;
+            height: 50px; /* Smaller height for the header */
+            background: linear-gradient(135deg, #9b4d96, #00ffcc); /* Neon purple to cyan gradient */
+            box-shadow: 0 4px 12px rgba(0, 255, 255, 0.5); /* Glowing shadow effect */
+            display: flex;
+            justify-content: space-between; /* Align content to the sides */
+            align-items: center; /* Vertically center the content */
+            padding: 0 20px; /* Horizontal padding */
+            border-bottom: 2px solid #00ffcc; /* Neon border at the bottom */
+        }
+
+        /* Cyberpunk text effect */
+        .header-content {
+            color: #ffffff; /* White text for contrast */
+            font-size: 20px; /* Adjusted smaller font size */
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6), 0 0 15px #00ffcc; /* Neon glow effect */
+            letter-spacing: 2px; /* Spacing between letters */
+            animation: glitch 1.5s infinite; /* Glitch effect animation */
+            visibility: hidden; /* Hide text */
+        }
+
+        /* Glitch animation */
+        @keyframes glitch {
+            0% {
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6), 0 0 15px #00ffcc;
+                transform: translate(0);
+            }
+            20% {
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6), 0 0 15px #00ffcc, 0 0 25px #ff00ff;
+                transform: translate(-2px, -2px);
+            }
+            40% {
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6), 0 0 15px #00ffcc, 0 0 25px #ff00ff;
+                transform: translate(2px, 2px);
+            }
+            60% {
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6), 0 0 15px #00ffcc, 0 0 25px #ff00ff;
+                transform: translate(-2px, -2px);
+            }
+            80% {
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6), 0 0 15px #00ffcc;
+                transform: translate(2px, 2px);
+            }
+            100% {
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6), 0 0 15px #00ffcc;
+                transform: translate(0);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Removed header text -->
+    </header>
+</body>
+</html>
