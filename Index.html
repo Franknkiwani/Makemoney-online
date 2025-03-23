@@ -2,153 +2,116 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cashify Admin Panel</title>
+  <title>Admin Panel</title>
   <style>
-    :root {
-      --primary: #0ff;
-      --accent: #f0f;
-      --glass-bg: rgba(0, 0, 0, 0.6);
-      --border-glow: 0 0 10px var(--primary);
+    * {
+      box-sizing: border-box;
     }
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #111, #1a1a1a);
-      color: #fff;
+      background: #0e0e0e;
+      color: #00ffcc;
+      overflow-x: hidden;
     }
+
+    .glass {
+      background: rgba(0, 255, 204, 0.05);
+      border: 1px solid #00ffcc55;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #00ffcc66;
+    }
+
     header {
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      padding: 15px;
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-      color: var(--primary);
-      text-shadow: 0 0 6px var(--primary);
-      border-bottom: 1px solid #222;
-    }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 12px;
-      padding: 20px;
-      max-width: 500px;
-      margin: auto;
-    }
-    .stat-box {
-      background: var(--glass-bg);
-      border: 1px solid var(--primary);
-      border-radius: 8px;
-      box-shadow: var(--border-glow);
-      padding: 10px;
-      text-align: center;
-    }
-    .stat-title {
-      font-size: 12px;
-      color: var(--accent);
-      margin-bottom: 4px;
-    }
-    .stat-value {
-      font-size: 16px;
-      font-weight: bold;
-      color: var(--primary);
-      text-shadow: 0 0 3px var(--primary);
-    }
-    .more-section {
-      padding: 30px 15px;
-      text-align: center;
-      color: #ccc;
-      font-size: 14px;
-    }
-
-    .tools {
-      text-align: center;
-      margin-top: 20px;
-    }
-    .tools button {
-      background: var(--accent);
-      color: #000;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: var(--border-glow);
-    }
-
-    .modal-overlay {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(5px);
-      display: none;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      display: flex;
       align-items: center;
-      justify-content: center;
-      z-index: 100;
+      justify-content: space-between;
+      padding: 0 1rem;
+      background: rgba(0, 255, 204, 0.05);
+      border-bottom: 1px solid #00ffcc55;
+      z-index: 10;
     }
 
-    .modal {
-      background: #111;
-      padding: 20px;
+    .hamburger {
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    nav#sidebar {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 300px;
+      height: 100vh;
+      background: #121212;
+      color: #00ffcc;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      transition: 0.3s ease;
+      z-index: 9;
+    }
+
+    nav#sidebar.show {
+      left: 0;
+    }
+
+    nav#sidebar .glass {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    nav#sidebar .glass:hover {
+      background: rgba(0, 255, 204, 0.1);
+    }
+
+    nav#sidebar #closeSidebar {
+      text-align: center;
+      font-size: 1.2rem;
+      background: #ff0033;
+      color: white;
+      padding: 1rem;
       border-radius: 8px;
-      border: 1px solid var(--accent);
-      max-width: 400px;
-      width: 90%;
-      box-shadow: var(--border-glow);
-      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: auto;
     }
 
-    .modal h2 {
-      font-size: 18px;
-      margin-bottom: 15px;
+    .panel, .login {
+      max-width: 400px;
+      margin: 100px auto;
+      padding: 2rem;
       text-align: center;
     }
 
-    .user-list {
-      max-height: 300px;
-      overflow-y: auto;
-      font-size: 14px;
+    .login input {
+      background: #000;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
+      padding: 0.5rem;
+      width: 100%;
+      margin-bottom: 1rem;
     }
 
-    .user-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 8px 0;
-      border-bottom: 1px solid #333;
-      padding-bottom: 6px;
-    }
-
-    .user-row button {
-      background: transparent;
-      border: 1px solid red;
-      color: red;
-      padding: 4px 8px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .user-row button:hover {
-      background: red;
-      color: #000;
-    }
-
-    .close-btn {
-      margin-top: 15px;
-      background: var(--primary);
+    .login button {
+      background: #00ffcc;
       color: #000;
       border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
+      padding: 0.5rem;
       cursor: pointer;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      width: 100%;
+      font-weight: bold;
     }
-        .admin-buttons {
+
+    .admin-buttons {
       display: flex;
       flex-direction: column;
       gap: 1rem;
@@ -163,7 +126,7 @@
     }
 
     .hidden {
-      display: yes;
+      display: none;
     }
 
     h2, h3 {
@@ -177,48 +140,51 @@
   </style>
 </head>
 <body>
-  <header>Cashify Admin Panel</header>
 
-  <div class="stats">
-    <div class="stat-box">
-      <div class="stat-title">Total Clicks</div>
-      <div class="stat-value" id="totalClicks">Loading...</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-title">Total Users</div>
-      <div class="stat-value" id="totalUsers">Loading...</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-title">Total Balance</div>
-      <div class="stat-value" id="totalBalance">Loading...</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-title">Online Users</div>
-      <div class="stat-value" id="onlineUsers">Loading...</div>
-    </div>
-  </div>
+<header class="glass">
+  <div class="hamburger" onclick="toggleSidebar()">☰</div>
+  <div><strong>ADMIN PANEL</strong></div>
+</header>
 
-  <div class="tools">
-    <button id="deleteUsersBtn">Delete Users</button>
-<button id="deleteUsersBtn" onclick="location.href='playstore.html'">play store stats</button>
-    </div>
-    
-  <div class="more-section">
-    More admin tools coming soon...
-  </div>
+<nav id="sidebar">
+  <div class="glass" onclick="location.href='all-users.html'">ALL USERS</div>
+  <div class="glass" onclick="location.href='user-details.html'">ALL USERS DETAILS</div>
+  <div class="glass" onclick="location.href='ban-users.html'">BAN USERS</div>
+  <div class="glass" onclick="location.href='settings.html'">SETTINGS</div>
+  <div class="glass" onclick="location.href='logs.html'">VIEW LOGS</div>
+  <div id="closeSidebar" onclick="toggleSidebar()">CLOSE</div>
+</nav>
 
-  <!-- Modal -->
-  <div class="modal-overlay" id="userModal">
-    <div class="modal">
-      <h2>Delete Users</h2>
-      <div id="userList" class="user-list">Loading users...</div>
-      <button onclick="closeModal()" class="close-btn">Close</button>
-    </div>
+<div class="login glass" id="loginView">
+  <h2>Admin Login</h2>
+  <input type="email" id="email" placeholder="Email" />
+  <input type="password" id="password" placeholder="Password" />
+  <button onclick="login()">Login</button>
+  <p id="error"></p>
+</div>
+
+<div class="panel glass hidden" id="adminView">
+  <h2>Welcome, Admin</h2>
+  <h3>Total Visits: <span id="visits">Loading...</span></h3>
+  <h3>Total Installs: <span id="installs">Loading...</span></h3>
+  <h3>Total Shares: <span id="shares">Loading...</span></h3>
+  <h3>Top Country: <span id="country">Loading...</span></h3>
+
+  <div class="admin-buttons">
+    <button onclick="location.href='all-users.html'" class="glass">ALL USERS</button>
+    <button onclick="location.href='user-details.html'" class="glass">ALL USERS DETAILS</button>
+    <button onclick="location.href='ban-users.html'" class="glass">BAN USERS</button>
+    <button onclick="location.href='settings.html'" class="glass">SETTINGS</button>
+    <button onclick="location.href='logs.html'" class="glass">VIEW LOGS</button>
+    <button onclick="logout()" style="background:red;">Logout</button>
   </div>
-  <div class="panel glass hidden" id="adminView">
+</div>
+<button id="deleteUsersBtn" onclick="location.href='playstore.html'">ANALYTICS</button>
+    </div>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-  import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDFHskUWiyHhZke3KT9kkOtFI_gPsKfiGo",
@@ -227,114 +193,77 @@
     projectId: "itzhoyoo-f9f7e",
     storageBucket: "itzhoyoo-f9f7e.appspot.com",
     messagingSenderId: "1094792075584",
-    appId: "1:1094792075584:web:d49e9c3f899d3cd31082a5",
-    measurementId: "G-LLT6F9WRKH"
+    appId: "1:1094792075584:web:d49e9c3f899d3cd31082a5"
   };
 
   const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
   const db = getDatabase(app);
 
-  // Stats Elements
-  const totalClicksEl = document.getElementById('totalClicks');
-  const totalUsersEl = document.getElementById('totalUsers');
-  const totalBalanceEl = document.getElementById('totalBalance');
-  const onlineUsersEl = document.getElementById('onlineUsers');
+  const loginView = document.getElementById("loginView");
+  const adminView = document.getElementById("adminView");
+  const errorMsg = document.getElementById("error");
 
-  // Modals & Buttons
-  const userModal = document.getElementById('userModal');
-  const userListDiv = document.getElementById('userList');
-  const contactModal = document.getElementById('contactModal');
-  const contactListDiv = document.getElementById('contactList');
-
-  // Pull and update stats
-  function updateStats() {
-    const usersRef = ref(db, 'users');
-    onValue(usersRef, (snapshot) => {
-      const data = snapshot.val();
-      let totalClicks = 0;
-      let totalBalance = 0;
-      let totalUsers = 0;
-      let onlineUsers = 0;
-
-      if (data) {
-        Object.values(data).forEach(user => {
-          totalUsers++;
-          totalClicks += user.clicks || 0;
-          totalBalance += parseFloat(user.balance || 0);
-          if (user.online) onlineUsers++;
-        });
-      }
-
-      totalClicksEl.textContent = totalClicks.toLocaleString();
-      totalUsersEl.textContent = totalUsers;
-      totalBalanceEl.textContent = '$' + totalBalance.toFixed(3);
-      onlineUsersEl.textContent = onlineUsers;
-    });
+  function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("show");
   }
 
-  // Load users into delete modal
-  function loadUsersForDeletion() {
-    userListDiv.innerHTML = 'Loading...';
-    const usersRef = ref(db, 'users');
-    onValue(usersRef, (snapshot) => {
-      const data = snapshot.val();
-      if (!data) {
-        userListDiv.innerHTML = '<p>No users found.</p>';
-        return;
-      }
+  window.login = function () {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-      userListDiv.innerHTML = '';
-      Object.entries(data).forEach(([uid, user]) => {
-        const div = document.createElement('div');
-        div.className = 'user-row';
-        div.innerHTML = `
-          <span>${user.email || 'No email'}<br><small>$${(user.balance || 0).toFixed(2)}</small></span>
-          <button onclick="confirmDelete('${uid}', '${user.email}')">Delete</button>
-        `;
-        userListDiv.appendChild(div);
-      });
-    });
-  }
-
-  // Expose delete logic to window
-  window.confirmDelete = function(uid, email) {
-    const sure = confirm(`Are you sure you want to DELETE ${email}'s account?`);
-    if (sure) {
-      remove(ref(db, `users/${uid}`)).then(() => {
-        alert("User deleted.");
-        loadUsersForDeletion();
-      }).catch(err => {
-        alert("Error: " + err.message);
-      });
-    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => errorMsg.textContent = "")
+      .catch(() => errorMsg.textContent = "Login failed. Invalid credentials.");
   };
 
-  // Load contact messages — placeholder
-  function loadContactRequests() {
-    contactListDiv.innerHTML = '<p>Coming soon...</p>';
+  function loadStats() {
+    get(ref(db, "tracking/visits")).then(snap => {
+      document.getElementById("visits").textContent = snap.exists() ? snap.val() : "0";
+    });
+
+    get(ref(db, "tracking/installs")).then(snap => {
+      document.getElementById("installs").textContent = snap.exists() ? snap.val() : "0";
+    });
+
+    get(ref(db, "tracking/shares")).then(snap => {
+      document.getElementById("shares").textContent = snap.exists() ? snap.val() : "0";
+    });
+
+    get(ref(db, "tracking/topCountry")).then(snap => {
+      document.getElementById("country").textContent = snap.exists() ? snap.val() : "Unknown";
+    });
   }
 
-  // Trigger modals
-  document.getElementById('deleteUsersBtn')?.addEventListener('click', () => {
-    userModal.style.display = 'flex';
-    loadUsersForDeletion();
+  function showAdmin() {
+    loginView.classList.add("hidden");
+    adminView.classList.remove("hidden");
+    loadStats();
+  }
+
+  function showLogin() {
+    loginView.classList.remove("hidden");
+    adminView.classList.add("hidden");
+  }
+
+  onAuthStateChanged(auth, user => {
+    if (user && user.email === "franknkiwani@gmail.com") {
+      showAdmin();
+    } else if (user) {
+      signOut(auth);
+      errorMsg.textContent = "Unauthorized access.";
+    } else {
+      showLogin();
+    }
   });
 
-  document.querySelector('.close-btn')?.addEventListener('click', () => {
-    userModal.style.display = 'none';
-  });
-
-  document.getElementById('viewContactBtn')?.addEventListener('click', () => {
-    contactModal.style.display = 'flex';
-    loadContactRequests();
-  });
-
-  document.querySelector('.close-contact-btn')?.addEventListener('click', () => {
-    contactModal.style.display = 'none';
-  });
-
-  // Start pulling stats now
-  updateStats();
+  window.logout = function () {
+    signOut(auth).then(() => {
+      showLogin();
+      document.getElementById("sidebar").classList.remove("show");
+    });
+  };
 </script>
+
 </body>
 </html>
