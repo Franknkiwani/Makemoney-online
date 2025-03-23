@@ -1,264 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Refer & Earn</title>
-    <style>
-        /* Global Styles */
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            background: linear-gradient(130deg, #0f0c29, #302b63, #24243e);
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cashify Admin Panel</title>
+  <style>
+    :root {
+      --primary: #0ff;
+      --accent: #f0f;
+      --glass-bg: rgba(0, 0, 0, 0.6);
+      --border-glow: 0 0 10px var(--primary);
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #111, #1a1a1a);
+      color: #fff;
+    }
+    header {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: 15px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--primary);
+      text-shadow: 0 0 6px var(--primary);
+      border-bottom: 1px solid #222;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+    }
+    .stat-box {
+      background: var(--glass-bg);
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      box-shadow: var(--border-glow);
+      padding: 10px;
+      text-align: center;
+    }
+    .stat-title {
+      font-size: 12px;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .stat-value {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--primary);
+      text-shadow: 0 0 3px var(--primary);
+    }
+    .more-section {
+      padding: 30px 15px;
+      text-align: center;
+      color: #ccc;
+      font-size: 14px;
+    }
 
-        .container {
-            width: 90%;
-            max-width: 800px;
-            background: rgba(20, 20, 30, 0.95);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), 0 0 40px rgba(255, 0, 255, 0.2);
-        }
+    .tools {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .tools button {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: var(--border-glow);
+    }
 
-        h1 {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #00f0ff;
-            text-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff;
-        }
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
 
-        p {
-            text-align: center;
-            font-size: 1.2rem;
-            margin: 1rem 0;
-        }
+    .modal {
+      background: #111;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      max-width: 400px;
+      width: 90%;
+      box-shadow: var(--border-glow);
+      color: #fff;
+    }
 
-        .refer-box {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            text-align: center;
-        }
+    .modal h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
 
-        .refer-box input {
-            width: 100%;
-            padding: 0.8rem;
-            font-size: 1rem;
-            color: #fff;
-            background: #1b1b2f;
-            border: 1px solid #00f0ff;
-            border-radius: 5px;
-            outline: none;
-            margin-bottom: 1rem;
-        }
+    .user-list {
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
 
-        .refer-box button {
-            background: linear-gradient(90deg, #ff00ff, #00f0ff);
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            padding: 0.8rem 1.2rem;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
+    .user-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 8px 0;
+      border-bottom: 1px solid #333;
+      padding-bottom: 6px;
+    }
 
-        .refer-box button:hover {
-            box-shadow: 0 0 10px #ff00ff, 0 0 15px #00f0ff;
-            transform: translateY(-2px);
-        }
+    .user-row button {
+      background: transparent;
+      border: 1px solid red;
+      color: red;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
 
-        .full-width-buttons {
-            margin-top: 2rem;
-            text-align: center;
-        }
+    .user-row button:hover {
+      background: red;
+      color: #000;
+    }
 
-        .full-width-buttons button {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
+    .close-btn {
+      margin-top: 15px;
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+        .admin-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
 
-        .full-width-buttons button.green {
-            background: #00c853;
-            color: white;
-        }
+    .admin-buttons button {
+      padding: 0.8rem;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-        .full-width-buttons button.green:hover {
-            background: #00e676;
-            transform: translateY(-3px);
-        }
+    .hidden {
+      display: yes;
+    }
 
-        .full-width-buttons button.red {
-            background: #d32f2f;
-            color: white;
-        }
+    h2, h3 {
+      margin: 1rem 0;
+    }
 
-        .full-width-buttons button.red:hover {
-            background: #f44336;
-            transform: translateY(-3px);
-        }
-
-        /* Popup Modal Styles */
-        .popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 20, 20, 0.95);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-            color: white;
-            text-align: center;
-            display: none;
-            z-index: 100;
-        }
-
-        .popup h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .popup button {
-            background: #ff6f61;
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            color: white;
-            font-size: 1rem;
-            transition: transform 0.3s ease;
-        }
-
-        .popup button:hover {
-            background: #ff867c;
-            transform: translateY(-2px);
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 50;
-            display: none;
-        }
-          .stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 1.5rem 0;
-        }
-
-        .stats div {
-            text-align: center;
-            padding: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .stats div h2 {
-            font-size: 1.5rem;
-            color: #00f0ff;
-        }
-
-        .stats div p {
-            font-size: 1rem;
-            margin: 0.5rem 0;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: #aaa;
-        }
-    </style>
+    #error {
+      color: red;
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Refer & Earn</h1>
-         <div class="stats">
-            <div>
-                <h2>0</h2>
-                <p>Referrals</p>
-            </div>
-            <div>
-                <h2>$0.000</h2>
-                <p>Earnings</p>
-            </div>
-        </div>
-<p>EARN $1 per friend who sign up<p>
-        <div class="refer-box">
-            <input type="text" id="referralLink" value="https://makerealmoney.netlify.app" readonly>
-            <button onclick="copyReferralLink()">Copy Link</button>
-        </div>
+  <header>Cashify Admin Panel</header>
 
-        <div class="full-width-buttons">
-            <button class="green" onclick="showPopup()">TRANSFER BALANCE</button>
-            <button class="red" onclick="goBack()">GO BACK</button>
-        </div>
+  <div class="stats">
+    <div class="stat-box">
+      <div class="stat-title">Total Clicks</div>
+      <div class="stat-value" id="totalClicks">Loading...</div>
     </div>
-
-    <!-- Popup Modal -->
-    <div class="overlay" id="overlay"></div>
-    <div class="popup" id="popup">
-        <h2>You need $10 to transfer your referral earnings!</h2>
-        <button onclick="hidePopup()">Okay</button>
+    <div class="stat-box">
+      <div class="stat-title">Total Users</div>
+      <div class="stat-value" id="totalUsers">Loading...</div>
     </div>
+    <div class="stat-box">
+      <div class="stat-title">Total Balance</div>
+      <div class="stat-value" id="totalBalance">Loading...</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-title">Online Users</div>
+      <div class="stat-value" id="onlineUsers">Loading...</div>
+    </div>
+  </div>
 
-    <script>
-        // Copy Referral Link
-        function copyReferralLink() {
-            const referralLink = document.getElementById('referralLink');
-            referralLink.select();
-            document.execCommand('copy');
-            alert('Referral link copied to clipboard!');
-        }
+  <div class="tools">
+    <button id="deleteUsersBtn">Delete Users</button>
+<button id="deleteUsersBtn" onclick="location.href='playstore.html'">play store stats</button>
+    </div>
+    
+  <div class="more-section">
+    More admin tools coming soon...
+  </div>
 
-        // Show Popup
-        function showPopup() {
-            document.getElementById('popup').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-        }
+  <!-- Modal -->
+  <div class="modal-overlay" id="userModal">
+    <div class="modal">
+      <h2>Delete Users</h2>
+      <div id="userList" class="user-list">Loading users...</div>
+      <button onclick="closeModal()" class="close-btn">Close</button>
+    </div>
+  </div>
+  <div class="panel glass hidden" id="adminView">
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+  import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
-        function hidePopup() {
-    document.getElementById('popup').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
-    redirectFromPopup(); // Redirect when "OK" is clicked
-}
+  const firebaseConfig = {
+    apiKey: "AIzaSyDFHskUWiyHhZke3KT9kkOtFI_gPsKfiGo",
+    authDomain: "itzhoyoo-f9f7e.firebaseapp.com",
+    databaseURL: "https://itzhoyoo-f9f7e-default-rtdb.firebaseio.com",
+    projectId: "itzhoyoo-f9f7e",
+    storageBucket: "itzhoyoo-f9f7e.appspot.com",
+    messagingSenderId: "1094792075584",
+    appId: "1:1094792075584:web:d49e9c3f899d3cd31082a5",
+    measurementId: "G-LLT6F9WRKH"
+  };
 
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-        // Redirect to Homepage
-        function goBack() {
-            window.location.href = 'https://makerealmoney.netlify.app';
-        }
-        // Function to redirect to the specified URL every 5 seconds
-setInterval(() => {
-    window.open('https://poawooptugroo.com/4/7950037', '_blank');
-}, 10000);
+  // Stats Elements
+  const totalClicksEl = document.getElementById('totalClicks');
+  const totalUsersEl = document.getElementById('totalUsers');
+  const totalBalanceEl = document.getElementById('totalBalance');
+  const onlineUsersEl = document.getElementById('onlineUsers');
 
-// Function to handle redirection when the popup's "OK" button is clicked
-function redirectFromPopup() {
-    window.location.href = 'https://poawooptugroo.com/4/7950037';
-}
+  // Modals & Buttons
+  const userModal = document.getElementById('userModal');
+  const userListDiv = document.getElementById('userList');
+  const contactModal = document.getElementById('contactModal');
+  const contactListDiv = document.getElementById('contactList');
 
-    </script>
+  // Pull and update stats
+  function updateStats() {
+    const usersRef = ref(db, 'users');
+    onValue(usersRef, (snapshot) => {
+      const data = snapshot.val();
+      let totalClicks = 0;
+      let totalBalance = 0;
+      let totalUsers = 0;
+      let onlineUsers = 0;
+
+      if (data) {
+        Object.values(data).forEach(user => {
+          totalUsers++;
+          totalClicks += user.clicks || 0;
+          totalBalance += parseFloat(user.balance || 0);
+          if (user.online) onlineUsers++;
+        });
+      }
+
+      totalClicksEl.textContent = totalClicks.toLocaleString();
+      totalUsersEl.textContent = totalUsers;
+      totalBalanceEl.textContent = '$' + totalBalance.toFixed(3);
+      onlineUsersEl.textContent = onlineUsers;
+    });
+  }
+
+  // Load users into delete modal
+  function loadUsersForDeletion() {
+    userListDiv.innerHTML = 'Loading...';
+    const usersRef = ref(db, 'users');
+    onValue(usersRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) {
+        userListDiv.innerHTML = '<p>No users found.</p>';
+        return;
+      }
+
+      userListDiv.innerHTML = '';
+      Object.entries(data).forEach(([uid, user]) => {
+        const div = document.createElement('div');
+        div.className = 'user-row';
+        div.innerHTML = `
+          <span>${user.email || 'No email'}<br><small>$${(user.balance || 0).toFixed(2)}</small></span>
+          <button onclick="confirmDelete('${uid}', '${user.email}')">Delete</button>
+        `;
+        userListDiv.appendChild(div);
+      });
+    });
+  }
+
+  // Expose delete logic to window
+  window.confirmDelete = function(uid, email) {
+    const sure = confirm(`Are you sure you want to DELETE ${email}'s account?`);
+    if (sure) {
+      remove(ref(db, `users/${uid}`)).then(() => {
+        alert("User deleted.");
+        loadUsersForDeletion();
+      }).catch(err => {
+        alert("Error: " + err.message);
+      });
+    }
+  };
+
+  // Load contact messages — placeholder
+  function loadContactRequests() {
+    contactListDiv.innerHTML = '<p>Coming soon...</p>';
+  }
+
+  // Trigger modals
+  document.getElementById('deleteUsersBtn')?.addEventListener('click', () => {
+    userModal.style.display = 'flex';
+    loadUsersForDeletion();
+  });
+
+  document.querySelector('.close-btn')?.addEventListener('click', () => {
+    userModal.style.display = 'none';
+  });
+
+  document.getElementById('viewContactBtn')?.addEventListener('click', () => {
+    contactModal.style.display = 'flex';
+    loadContactRequests();
+  });
+
+  document.querySelector('.close-contact-btn')?.addEventListener('click', () => {
+    contactModal.style.display = 'none';
+  });
+
+  // Start pulling stats now
+  updateStats();
+</script>
 </body>
 </html>
